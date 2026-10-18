@@ -1,0 +1,18 @@
+:host { display: block; min-height: 100vh; }
+.placeholder-page { min-height: 100vh; padding: 25px clamp(20px, 5vw, 70px); background: #f5f7fb; }
+.placeholder-header { display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 10px; color: #173252; font: 800 19px/1 'Manrope', sans-serif; text-decoration: none; }
+.brand > span:last-child > span { color: #3972ca; }
+.brand-icon { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 11px; background: #eaf1fc; color: #3972ca; font-size: 15px; }
+.dashboard-link { color: #4779bf; font-size: 11px; font-weight: 600; text-decoration: none; }
+.placeholder-card { display: flex; width: min(100%, 480px); min-height: 380px; flex-direction: column; align-items: flex-start; justify-content: center; margin: clamp(75px, 15vh, 145px) auto 0; padding: 38px; border: 1px solid #e7ebf2; border-radius: 16px; background: #fff; box-shadow: 0 14px 44px rgba(31,55,91,.06); }
+.placeholder-icon { display: grid; width: 48px; height: 48px; margin-bottom: 23px; place-items: center; border-radius: 14px; background: #edf4ff; color: #3972ca; }
+.placeholder-icon svg { width: 25px; height: 25px; }
+.eyebrow { margin: 0 0 9px; color: #8da0bb; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; }
+h1 { margin: 0; color: #1b2e49; font: 700 26px/1.25 'Manrope', sans-serif; letter-spacing: -.7px; }
+.description { max-width: 370px; margin: 11px 0 18px; color: #7d8ba0; font-size: 12px; line-height: 1.7; }
+.coming-soon { padding: 6px 9px; border-radius: 6px; background: #f2f5f9; color: #7c899c; font-size: 9px; font-weight: 650; }
+.primary-link { display: inline-flex; height: 38px; align-items: center; margin-top: 24px; padding: 0 14px; border-radius: 8px; background: #2b68bd; color: white; font-size: 10px; font-weight: 650; text-decoration: none; }
+.primary-link:hover { background: #2059aa; }
+footer { margin-top: 30px; color: #a1aaba; font-size: 9px; text-align: center; }
+@media (max-width: 520px) { .placeholder-page { padding: 18px; } .placeholder-card { min-height: 330px; margin-top: 90px; padding: 28px; } h1 { font-size: 23px; } }

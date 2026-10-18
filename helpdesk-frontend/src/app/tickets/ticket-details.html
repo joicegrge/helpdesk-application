@@ -1,0 +1,71 @@
+<main class="details-page">
+  <header class="details-header">
+    <a [routerLink]="backUrl()" class="back-link">← <span>Back to tickets</span></a>
+    <div class="header-actions">
+      @if (user()?.role === 'USER') { <a routerLink="/my-tickets" class="details-brand">Help<span>Desk</span></a> } @else { <a routerLink="/dashboard" class="details-brand">Help<span>Desk</span></a> }
+      <button type="button" class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="darkMode() ? 'Switch to light mode' : 'Switch to dark mode'" [attr.title]="darkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+        @if (darkMode()) { <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v2m0 12v2M18 10h-2M4 10H2m13.66-5.66-1.42 1.42M5.76 14.24 4.34 15.66m11.32 0-1.42-1.42M5.76 5.76 4.34 4.34" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> } @else { <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.2 12.3A6.7 6.7 0 0 1 7.7 3.8a6.8 6.8 0 1 0 8.5 8.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> }
+      </button>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <article class="details-card"><p>Loading ticket details…</p></article>
+  } @else if (ticket(); as item) {
+    <article class="details-card">
+      <div class="details-overline">TICKET DETAILS <span>·</span> {{ item.number }}</div>
+      <div class="details-title-row"><h1>{{ item.title }}</h1></div>
+      <section class="ticket-info-section" aria-label="Ticket information">
+        <h2>Ticket information</h2>
+        <dl class="details-meta">
+          <div><dt>Ticket number</dt><dd>{{ item.number }}</dd></div>
+          <div><dt>Category</dt><dd>{{ item.category }}</dd></div>
+          <div><dt>Priority</dt><dd><span class="priority-badge" [ngClass]="item.priority.toLowerCase()">{{ item.priority }}</span></dd></div>
+          <div><dt>Status</dt><dd><span class="status-badge" [ngClass]="item.status.toLowerCase().replace('_', '-')">{{ statusLabel(item.status) }}</span></dd></div>
+          <div><dt>Created by</dt><dd>{{ item.createdBy }}</dd></div>
+          <div><dt>Assigned to</dt><dd>{{ item.assignedTo }}</dd></div>
+          <div><dt>Created date</dt><dd>{{ item.createdAt }}</dd></div>
+        </dl>
+      </section>
+      @if (item.status === 'PENDING_APPROVAL') { <p class="pending-approval-notice" role="status">Pending Admin Approval · this ticket is not yet closed.</p> }
+      @if (item.status === 'PENDING_RESOLUTION_APPROVAL') { <p class="pending-approval-notice" role="status">Pending Admin Resolution Review · this ticket is not yet resolved.</p> }
+      @if (item.status === 'PENDING_USER_CONFIRMATION') { <p class="pending-approval-notice" role="status">Admin approved this ticket. It will be closed after you confirm resolution.</p> }
+      <section class="description-section"><h2>Description</h2><p>{{ item.description || 'No description was provided for this sample ticket.' }}</p></section>
+      @if ((item.status === 'RESOLVED' || item.status === 'CLOSED' || item.status === 'PENDING_USER_CONFIRMATION') && item.resolutionDescription) { <section class="resolution-section"><h2>Resolution Description</h2><p>{{ item.resolutionDescription }}</p></section> }
+      <section class="comments-section" aria-label="Ticket comments">
+        <div class="comments-heading"><h2>Comments</h2><span>{{ comments().length }}</span></div>
+        @if (commentsLoading()) { <p class="comments-empty">Loading comments…</p> }
+        @else if (comments().length === 0) { <p class="comments-empty">No comments yet.</p> }
+        @else {
+          <div class="comment-list">@for (comment of comments(); track comment.id) { <article class="comment-item"><div class="comment-meta"><strong>{{ comment.user_name }}</strong><time>{{ comment.created_at | date:'medium' }}</time></div><p>{{ comment.comment_text }}</p></article> }</div>
+        }
+        @if (item.status !== 'CLOSED' && item.status !== 'PENDING_APPROVAL') { <form class="comment-form" (submit)="$event.preventDefault(); addComment()"><label for="ticket-comment">Add a comment</label><textarea id="ticket-comment" rows="3" maxlength="5000" [value]="commentText()" (input)="commentText.set($any($event.target).value)" placeholder="Write a comment for this ticket"></textarea>@if (user()?.role === 'SUPPORT') { <small>Before resolving or requesting closure, post a comment describing the work completed.</small> }<div class="comment-form-footer"><small>Up to 5,000 characters</small><button type="submit" class="back-button" [disabled]="postingComment()">{{ postingComment() ? 'Posting…' : 'Post comment' }}</button></div></form> }
+        @if (commentError()) { <p class="action-error" role="alert">{{ commentError() }}</p> }
+      </section>
+      @if (canUpdateStatus() || canAssign() || canConfirmResolution()) {
+        <section class="ticket-actions" aria-label="Ticket actions">
+          @if (item.status === 'CLOSED') { <p class="closed-ticket-notice" role="note">This ticket is closed and cannot be edited.</p> }
+          @else if (item.status === 'PENDING_APPROVAL') { @if (canAssign()) { <div class="closure-review-actions"><label for="closure-reason">Rejection reason <span>(required to reject)</span></label><textarea id="closure-reason" rows="3" [value]="closureReason()" (input)="closureReason.set($any($event.target).value)" placeholder="Explain what still needs to be done"></textarea><div><button type="button" class="back-button" (click)="reviewClosure('approve')" [disabled]="reviewingClosure()">{{ reviewingClosure() ? 'Saving…' : 'Approve Closure' }}</button><button type="button" class="reject-button" (click)="reviewClosure('reject')" [disabled]="reviewingClosure()">Reject Closure</button></div></div> } @else { <p class="pending-approval-notice" role="note">Waiting for an Admin to review this closure request.</p> } }
+          @else if (item.status === 'PENDING_RESOLUTION_APPROVAL') { @if (canAssign()) { <div class="closure-review-actions"><label for="closure-reason">Rejection reason <span>(required to reject)</span></label><textarea id="closure-reason" rows="3" [value]="closureReason()" (input)="closureReason.set($any($event.target).value)" placeholder="Explain what still needs to be resolved"></textarea><div><button type="button" class="back-button" (click)="reviewResolution('approve')" [disabled]="reviewingResolution()">{{ reviewingResolution() ? 'Saving…' : 'Approve Resolution' }}</button><button type="button" class="reject-button" (click)="reviewResolution('reject')" [disabled]="reviewingResolution()">Reject Resolution</button></div></div> } @else { <p class="pending-approval-notice" role="note">Waiting for an Admin to review the support resolution.</p> } }
+          @else if (item.status === 'PENDING_USER_CONFIRMATION') { @if (canConfirmResolution()) { <div class="closure-review-actions"><p>The Admin approved the staff update. Confirm if your issue is resolved to close the ticket.</p><div><button type="button" class="back-button" (click)="confirmResolution()" [disabled]="confirmingResolution()">{{ confirmingResolution() ? 'Saving…' : 'Yes, confirm and close ticket' }}</button></div></div> } @else { <p class="pending-approval-notice" role="note">Waiting for the ticket creator to confirm closure.</p> } }
+          @else {
+            @if (canUpdateStatus()) {
+              <div class="ticket-action-control"><label for="ticket-status">Update status</label><div><select id="ticket-status" [value]="selectedStatus()" (change)="selectedStatus.set($any($event.target).value)"><option value="OPEN">Open</option><option value="ASSIGNED">Assigned</option><option value="IN_PROGRESS">In progress</option><option value="RESOLVED">Resolved</option><option value="CLOSED">Closed</option></select>@if (!canAssign()) { <button type="button" class="back-button" (click)="saveStatus()" [disabled]="savingStatus()">{{ savingStatus() ? 'Saving…' : 'Save status' }}</button> }</div></div>
+            }
+            @if (canAssign() && selectedStatus() === 'RESOLVED') {
+              <div class="ticket-action-control resolution-input"><label for="resolution-description">Resolution description <span>(required)</span></label><textarea id="resolution-description" rows="4" [value]="resolutionDescription()" (input)="resolutionDescription.set($any($event.target).value)" placeholder="Describe how this issue was resolved" [attr.aria-invalid]="!resolutionDescription().trim()"></textarea>@if (!resolutionDescription().trim()) { <small class="validation-message">Enter how the issue was resolved before saving.</small> }</div>
+            }
+            @if (canAssign()) {
+              <div class="ticket-action-control"><label for="ticket-assignee">Assign to support</label><div><select id="ticket-assignee" [value]="selectedAssignee()" (change)="selectedAssignee.set($any($event.target).value)"><option value="">Unassigned</option>@for (support of supportUsers(); track support.id) { <option [value]="support.id">{{ support.full_name }}</option> }</select><button type="button" class="back-button" (click)="saveAdminChanges()" [disabled]="savingChanges()">{{ savingChanges() ? 'Saving…' : 'Save changes' }}</button></div></div>
+              <div class="ticket-action-control"><label for="ticket-priority">Change priority</label><div><select id="ticket-priority" [value]="selectedPriority()" (change)="selectedPriority.set($any($event.target).value)"><option value="LOW">Low</option><option value="MEDIUM">Medium</option><option value="HIGH">High</option><option value="CRITICAL">Critical</option></select><button type="button" class="back-button" (click)="savePriority()" [disabled]="savingPriority()">{{ savingPriority() ? 'Saving…' : 'Save priority' }}</button></div></div>
+            }
+          }
+        </section>
+      }
+      @if (actionMessage()) { <p class="action-message" role="status">{{ actionMessage() }}</p> }
+      @if (actionError()) { <p class="action-error" role="alert">{{ actionError() }}</p> }
+    </article>
+  } @else {
+    <article class="details-card missing-ticket"><div class="details-overline">TICKET DETAILS</div><h1>Ticket not found</h1><p>This ticket is unavailable or your account does not have permission to view it.</p><a [routerLink]="backUrl()" class="back-button">Return to tickets</a></article>
+  }
+</main>

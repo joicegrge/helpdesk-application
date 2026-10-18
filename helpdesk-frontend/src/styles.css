@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import './app/dashboard/dashboard.css';
+
+:root {
+  color-scheme: light;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  color: #15243a;
+  background: #f4f7fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* { box-sizing: border-box; }
+html, body { min-width: 320px; min-height: 100%; margin: 0; }
+body { min-height: 100vh; }
+button, input { font: inherit; }
+button, a, input { -webkit-tap-highlight-color: transparent; }
+::selection { background: #cfddff; color: #173c83; }
+
+.status-badge.pending-approval { background: #fff4df; color: #98610b; }
+.app-layout.dashboard-view .status-badge.pending-admin-approval { background: #fff4df; color: #98610b; }
+.tickets-view .all-tickets-table .status-badge.pending-approval { background: #fff4df; color: #98610b; }
+.status-badge.pending-resolution-approval { background: #fff4df; color: #98610b; }
+.status-badge.pending-user-confirmation { background: #eef4ff; color: #527bc3; }
+.app-layout.dashboard-view .status-badge.pending-admin-resolution-review { background: #fff4df; color: #98610b; }
+.pending-approval-notice { margin: 18px 0 0; padding: 12px 14px; border: 1px solid #f0d49c; border-radius: 8px; background: #fff8e9; color: #80540d; font-size: 13px; font-weight: 650; }
+.closure-review-actions { grid-column: 1 / -1; display: grid; gap: 10px; }
+.closure-review-actions label { color: #63738b; font-size: 12px; font-weight: 700; }
+.closure-review-actions label span { color: #9a5960; font-weight: 500; }
+.closure-review-actions textarea { width: 100%; min-height: 84px; padding: 11px 12px; resize: vertical; border: 1px solid #dfe6ef; border-radius: 8px; background: #fff; color: #344761; font: 13px/1.55 'DM Sans', sans-serif; }
+.closure-review-actions > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.reject-button { display: inline-flex; padding: 11px 16px; border: 1px solid #e6b4b1; border-radius: 8px; background: #fff5f4; color: #a73e3a; font-size: 13px; font-weight: 650; cursor: pointer; }
+.closure-review-actions button:disabled { opacity: .65; cursor: wait; }
+html[data-theme='dark'] .pending-approval-notice { border-color: #6b532b; background: #302819; color: #f1d08d; }
+html[data-theme='dark'] .closure-review-actions textarea { border-color: #3b4d65; background: #111b2a; color: #d8e1ef; }
+html[data-theme='dark'] .reject-button { border-color: #714544; background: #332323; color: #f0aaa6; }
+html[data-theme='dark'] .tickets-view .all-tickets-table .status-badge.pending-approval { background: #453820; color: #f1d08d; }
+html[data-theme='dark'] .status-badge.pending-resolution-approval, html[data-theme='dark'] .app-layout.dashboard-view .status-badge.pending-admin-resolution-review { background: #453820; color: #f1d08d; }
+html[data-theme='dark'] .status-badge.pending-user-confirmation { background: #263a59; color: #a9caff; }
+
+/* Ticket details key/value table, theme toggle, and complete dark theme. */
+.header-actions { display:flex; align-items:center; gap:16px; }
+.theme-toggle { display:grid; width:42px; height:42px; place-items:center; border:1px solid #dfe6ef; border-radius:10px; background:#fff; color:#526781; cursor:pointer; }
+.theme-toggle svg { width:19px; height:19px; }
+.theme-toggle:hover { border-color:#9ab7e3; color:#2b68bd; }
+.ticket-info-section { margin-top:28px; }
+.ticket-info-section>h2 { margin:0 0 12px; color:#31445f; font:700 16px 'Manrope',sans-serif; }
+.details-meta { display:block; overflow:hidden; border:1px solid #e5eaf1; border-radius:10px; }
+.details-meta div { display:grid; grid-template-columns:minmax(150px,.36fr) minmax(0,1fr); align-items:center; gap:16px; min-height:52px; padding:10px 16px; border-bottom:1px solid #edf0f5; }
+.details-meta div:last-child { border-bottom:0; }
+.details-meta dt { color:#74839a; }
+.details-meta dd { margin:0; color:#344761; }
+.description-section { margin-top:24px; padding:20px; border:1px solid #e5eaf1; border-radius:10px; background:#fbfcfe; }
+.description-section h2 { color:#31445f; }
+.resolution-section { margin-top:16px; }
+html[data-theme='dark'] .details-page { background:#101827; color:#e4ebf5; }
+html[data-theme='dark'] .details-card { border-color:#29384d; background:#182436; box-shadow:0 16px 48px #0003; }
+html[data-theme='dark'] .details-brand, html[data-theme='dark'] .details-title-row h1, html[data-theme='dark'] .missing-ticket h1 { color:#e4ebf5; }
+html[data-theme='dark'] .theme-toggle { border-color:#314158; background:#111b2a; color:#c1cede; }
+html[data-theme='dark'] .theme-toggle:hover { border-color:#557bb2; color:#a8c8ff; }
+html[data-theme='dark'] .ticket-info-section>h2, html[data-theme='dark'] .description-section h2 { color:#dce6f4; }
+html[data-theme='dark'] .details-meta { border-color:#314158; }
+html[data-theme='dark'] .details-meta div { border-color:#29384d; }
+html[data-theme='dark'] .details-meta dt, html[data-theme='dark'] .details-meta dd { color:#c1cede; }
+html[data-theme='dark'] .description-section { border-color:#314158; background:#142033; }
+html[data-theme='dark'] .description-section p, html[data-theme='dark'] .missing-ticket p { color:#b2bfd1; }
+html[data-theme='dark'] .details-page .status-badge.closed { background:#29384d; color:#c1cede; }
+html[data-theme='dark'] .details-page .status-badge.open, html[data-theme='dark'] .details-page .status-badge.pending-approval, html[data-theme='dark'] .details-page .status-badge.pending-resolution-approval { background:#453820; color:#f1d08d; }
+html[data-theme='dark'] .details-page .status-badge.assigned, html[data-theme='dark'] .details-page .status-badge.pending-user-confirmation { background:#263a59; color:#a9caff; }
+html[data-theme='dark'] .details-page .status-badge.in-progress { background:#342f55; color:#c3b9ff; }
+html[data-theme='dark'] .details-page .status-badge.resolved { background:#1a3026; color:#91d2aa; }
+html[data-theme='dark'] .details-page .priority-badge.low { background:#1a3026; color:#91d2aa; }
+html[data-theme='dark'] .details-page .priority-badge.medium { background:#263a59; color:#a9caff; }
+html[data-theme='dark'] .details-page .priority-badge.high { background:#453820; color:#f1d08d; }
+html[data-theme='dark'] .details-page .priority-badge.critical { background:#472b2a; color:#ffaaa3; }
+html[data-theme='dark'] .details-page .category-badge { background:#26354a; color:#c1cede; }
+html[data-theme='dark'] .details-page .ticket-action-control label, html[data-theme='dark'] .details-page .comment-form label { color:#c1cede; }
+html[data-theme='dark'] .details-page .ticket-action-control select { border-color:#3b4d65; background:#111b2a; color:#d8e1ef; }
+html[data-theme='dark'] .details-page .action-message { border-color:#315642; background:#1a3026; color:#91d2aa; }
+html[data-theme='dark'] .details-page .action-error { border-color:#714544; background:#332323; color:#f0aaa6; }
+html[data-theme='dark'] .details-page .pending-approval-notice { border-color:#6b532b; background:#302819; color:#f1d08d; }
+@media (max-width:640px) {
+  .header-actions { gap:10px; }
+  .details-meta div { grid-template-columns:minmax(0,1fr); gap:5px; padding:12px 14px; }
+}
+
+/* Higher contrast and larger type are intentionally limited to Ticket Details. */
+.details-page .details-card { border:2px solid #b8c8dc; box-shadow:0 18px 48px #20334e20; }
+.details-page .details-overline { color:#596b83; font-size:13px; }
+.details-page .ticket-info-section>h2, .details-page .description-section h2, .details-page .resolution-section h2, .details-page .comments-heading h2 { font-size:18px; }
+.details-page .details-meta { border:2px solid #aebfd4; }
+.details-page .details-meta div { min-height:60px; border-bottom:1px solid #c4d0df; }
+.details-page .details-meta dt { color:#485d78; font-size:15px; font-weight:700; }
+.details-page .details-meta dd { color:#1e304a; font-size:16px; font-weight:700; }
+.details-page .description-section, .details-page .resolution-section, .details-page .comments-section, .details-page .ticket-actions { border-width:2px; }
+.details-page .description-section { border-color:#b8c8dc; background:#f8faff; }
+.details-page .description-section p, .details-page .resolution-section p { color:#334963; font-size:16px; line-height:1.8; }
+.details-page .comment-item { border:2px solid #c2cedd; background:#f8faff; }
+.details-page .comment-meta { color:#263b57; font-size:15px; }
+.details-page .comment-meta time { color:#536985; font-size:13px; }
+.details-page .comment-item p { color:#334963; font-size:15px; }
+.details-page .ticket-action-control label, .details-page .comment-form label, .details-page .closure-review-actions label { color:#405671; font-size:15px; }
+.details-page .ticket-action-control select, .details-page .ticket-action-control textarea, .details-page .comment-form textarea, .details-page .closure-review-actions textarea { border:2px solid #b8c8dc; color:#1e304a; font-size:15px; }
+.details-page .priority-badge, .details-page .status-badge, .details-page .category-badge { border:1px solid currentColor; font-size:14px; }
+.details-page .pending-approval-notice, .details-page .closed-ticket-notice, .details-page .action-message, .details-page .action-error { border-width:2px; font-size:15px; line-height:1.5; }
+html[data-theme='dark'] .details-page .details-card { border-color:#627895; }
+html[data-theme='dark'] .details-page .details-overline { color:#c2cee0; }
+html[data-theme='dark'] .details-page .details-meta { border-color:#7186a2; }
+html[data-theme='dark'] .details-page .details-meta div { border-color:#526782; }
+html[data-theme='dark'] .details-page .details-meta dt { color:#c2cee0; }
+html[data-theme='dark'] .details-page .details-meta dd { color:#f1f5fb; }
+html[data-theme='dark'] .details-page .description-section { border-color:#617895; background:#111d2d; }
+html[data-theme='dark'] .details-page .description-section p, html[data-theme='dark'] .details-page .resolution-section p { color:#e0e8f3; }
+html[data-theme='dark'] .details-page .comment-item { border-color:#526782; background:#111d2d; }
+html[data-theme='dark'] .details-page .comment-meta, html[data-theme='dark'] .details-page .comment-item p { color:#e0e8f3; }
+html[data-theme='dark'] .details-page .comment-meta time { color:#b5c3d7; }
+html[data-theme='dark'] .details-page .ticket-action-control label, html[data-theme='dark'] .details-page .comment-form label, html[data-theme='dark'] .details-page .closure-review-actions label { color:#d9e3f0; }
+html[data-theme='dark'] .details-page .ticket-action-control select, html[data-theme='dark'] .details-page .ticket-action-control textarea, html[data-theme='dark'] .details-page .comment-form textarea, html[data-theme='dark'] .details-page .closure-review-actions textarea { border-color:#617895; background:#0d1725; color:#f1f5fb; }

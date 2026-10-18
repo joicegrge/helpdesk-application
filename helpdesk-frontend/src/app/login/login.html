@@ -1,0 +1,109 @@
+<main class="login-shell">
+  <section class="brand-panel" aria-label="HelpDesk introduction">
+    <div class="brand-lockup">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M6 17v-2a10 10 0 0 1 20 0v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+          <rect x="4.5" y="15" width="5.5" height="9" rx="2.5" fill="currentColor" />
+          <rect x="22" y="15" width="5.5" height="9" rx="2.5" fill="currentColor" />
+          <path d="M25 24a5 5 0 0 1-5 4h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <circle cx="15.5" cy="28" r="1.5" fill="currentColor" />
+        </svg>
+      </span>
+      <span class="brand-name">Help<span>Desk</span></span>
+    </div>
+
+    <div class="brand-copy">
+      <p class="eyebrow">YOUR SUPPORT, SIMPLIFIED</p>
+      <h1>Great support<br />starts <span>here.</span></h1>
+      <p class="brand-description">One place to get the help you need and keep your day moving forward.</p>
+    </div>
+
+    <div class="support-illustration" aria-hidden="true">
+      <div class="illustration-glow"></div>
+      <div class="illustration-card">
+        <div class="illustration-card-top"><span></span><span></span><span></span></div>
+        <div class="chat-avatar">H</div>
+        <div class="chat-line line-long"></div>
+        <div class="chat-line line-short"></div>
+        <div class="chat-reply"><span class="reply-check">✓</span><span class="reply-line"></span></div>
+      </div>
+      <div class="floating-badge badge-sparkle">✦</div>
+      <div class="floating-badge badge-check">✓</div>
+    </div>
+
+    <p class="brand-footnote"><span class="status-dot"></span> Here for you, every step of the way</p>
+  </section>
+
+  <section class="form-panel" aria-labelledby="welcome-heading">
+    <div class="mobile-brand brand-lockup">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M6 17v-2a10 10 0 0 1 20 0v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+          <rect x="4.5" y="15" width="5.5" height="9" rx="2.5" fill="currentColor" />
+          <rect x="22" y="15" width="5.5" height="9" rx="2.5" fill="currentColor" />
+          <path d="M25 24a5 5 0 0 1-5 4h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <circle cx="15.5" cy="28" r="1.5" fill="currentColor" />
+        </svg>
+      </span>
+      <span class="brand-name">Help<span>Desk</span></span>
+    </div>
+
+    <div class="login-card">
+      <header class="form-heading">
+        <div class="form-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5 19 6v5.3c0 4.5-3 7.6-7 9.2-4-1.6-7-4.7-7-9.2V6l7-2.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 id="welcome-heading">Welcome Back</h2>
+        <p>Sign in to access your helpdesk account.</p>
+      </header>
+
+      <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+        <div class="field-group">
+          <label for="email">Email address</label>
+          <div class="input-wrap" [class.input-invalid]="showEmailError()">
+            <svg class="input-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2.5" y="4" width="15" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="m3.5 5 6.5 5 6.5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <input id="email" type="email" formControlName="email" placeholder="you@company.com" autocomplete="email" [attr.aria-invalid]="showEmailError() ? 'true' : null" [attr.aria-describedby]="showEmailError() ? 'email-error' : null" />
+          </div>
+          @if (showEmailError()) {
+            <span class="field-error" id="email-error" role="alert">{{ showEmailError() }}</span>
+          }
+        </div>
+
+        <div class="field-group">
+          <label for="password">Password</label>
+          <div class="input-wrap" [class.input-invalid]="(loginForm.controls.password.touched || submitted()) && loginForm.controls.password.hasError('required')">
+            <svg class="input-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3.5" y="8.5" width="13" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 8.5V6a3.5 3.5 0 0 1 7 0v2.5M10 12v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input id="password" [type]="passwordVisible() ? 'text' : 'password'" formControlName="password" placeholder="Enter your password" autocomplete="current-password" [attr.aria-invalid]="(loginForm.controls.password.touched || submitted()) && loginForm.controls.password.hasError('required') ? 'true' : null" [attr.aria-describedby]="(loginForm.controls.password.touched || submitted()) && loginForm.controls.password.hasError('required') ? 'password-error' : null" />
+            <button class="password-toggle" type="button" (click)="passwordVisible.update(value => !value)" [attr.aria-label]="passwordVisible() ? 'Hide password' : 'Show password'" [attr.aria-pressed]="passwordVisible()">
+              @if (passwordVisible()) {
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M2 10s2.9-5 8-5 8 5 8 5-2.9 5-8 5-8-5-8-5Z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2.2" stroke="currentColor" stroke-width="1.5"/><path d="m3 3 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              } @else {
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M2 10s2.9-5 8-5 8 5 8 5-2.9 5-8 5-8-5-8-5Z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2.2" stroke="currentColor" stroke-width="1.5"/></svg>
+              }
+            </button>
+          </div>
+          @if ((loginForm.controls.password.touched || submitted()) && loginForm.controls.password.hasError('required')) {
+            <span class="field-error" id="password-error" role="alert">Please enter your password.</span>
+          }
+        </div>
+
+        <div class="form-options">
+          <label class="remember-option"><input type="checkbox" formControlName="rememberMe" /><span class="custom-checkbox" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="m2 6 2.5 2.5L10 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Remember me</span></label>
+          <a href="#recovery" (click)="showRecoveryMessage($event)">Forgot password?</a>
+        </div>
+
+        <button class="sign-in-button" type="submit" [disabled]="loading()">
+          @if (loading()) { Signing in… } @else { Sign In <span aria-hidden="true">→</span> }
+        </button>
+        @if (notice()) {
+          <p class="notice-message" [class.error-notice]="noticeType() === 'error'" [class.success-notice]="noticeType() === 'success'" role="status">{{ notice() }}</p>
+        }
+      </form>
+
+      <div class="secure-note"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Your information is kept secure</div>
+    </div>
+
+    <footer class="page-footer">© 2026 HelpDesk. All rights reserved.</footer>
+  </section>
+</main>
